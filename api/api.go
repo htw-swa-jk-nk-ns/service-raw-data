@@ -2,14 +2,14 @@ package api
 
 import (
 	"context"
+	"github.com/htw-swa-jk-nk-ns/service-raw-data/db"
+	"github.com/htw-swa-jk-nk-ns/service-raw-data/vote"
 	"github.com/labstack/echo"
 	"github.com/pkg/errors"
 	"github.com/rs/xid"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 	"net/http"
-	"service-raw-data/db"
-	"service-raw-data/vote"
 )
 
 // StartAPI starts the API.

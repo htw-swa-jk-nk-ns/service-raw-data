@@ -1,13 +1,13 @@
 package cmd
 
 import (
+	"github.com/htw-swa-jk-nk-ns/service-raw-data/api"
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"os"
-	"service-raw-data/api"
 )
 
 func init() {

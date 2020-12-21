@@ -1,4 +1,4 @@
-module service-raw-data
+module github.com/htw-swa-jk-nk-ns/service-raw-data
 
 go 1.14
 

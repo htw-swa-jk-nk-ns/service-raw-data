@@ -1,7 +1,7 @@
 package main
 
 import (
-	"service-raw-data/cmd"
+	"github.com/htw-swa-jk-nk-ns/service-raw-data/cmd"
 )
 
 func main() {

@@ -3,9 +3,9 @@ package db
 import (
 	"context"
 	"fmt"
+	"github.com/htw-swa-jk-nk-ns/service-raw-data/vote"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
-	"service-raw-data/vote"
 	"sync"
 )
 
