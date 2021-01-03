@@ -47,9 +47,9 @@ func (c *redisDatabase) getAllVotes(ctx context.Context) (vote.Votes, error) {
 
 func (c *redisDatabase) initialize() error {
 	c.db = redis.NewClient(&redis.Options{
-		Addr:     viper.GetString("db.redis.addr"),
-		Password: viper.GetString("db.redis.password"),
-		DB:       viper.GetInt("db.redis.db"),
+		Addr:     viper.GetString("redis.addr"),
+		Password: viper.GetString("redis.password"),
+		DB:       viper.GetInt("redis.db"),
 	})
 	_, err := c.db.Ping(context.TODO()).Result()
 	if err != nil {

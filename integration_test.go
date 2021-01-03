@@ -20,9 +20,9 @@ import (
 func TestIntegration(t *testing.T) {
 	viper.Set("api.port", 8887)
 	viper.Set("api.format", "json")
-	viper.Set("db.redis.addr", "localhost:6379")
+	viper.Set("redis.addr", "localhost:6379")
 	viper.Set("db.type", "redis")
-	viper.Set("db.redis.db", 1)
+	viper.Set("redis.db", 1)
 
 	_, err := db.GetDatabase()
 	if !assert.NoError(t, err, "failed to get db, redis is probably not running on localhost:6379") {

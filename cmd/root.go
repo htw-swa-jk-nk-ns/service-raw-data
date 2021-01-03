@@ -8,10 +8,21 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"os"
+	"strings"
 )
 
 func init() {
 	log.Logger = zerolog.New(zerolog.ConsoleWriter{Out: os.Stderr})
+
+	cobra.OnInitialize(func() {
+		rep := strings.NewReplacer(".", "_")
+		viper.SetEnvKeyReplacer(rep)
+
+		viper.SetEnvPrefix("SERVICE_RAW_DATA")
+		viper.AutomaticEnv()
+
+		_ = viper.ReadInConfig()
+	})
 
 	//api
 	rootCMD.PersistentFlags().String("api-format", "json", "json format ('json' or 'xml')")
@@ -52,7 +63,7 @@ func init() {
 	}
 
 	//redis
-	err = viper.BindPFlag("db.redis.addr", rootCMD.PersistentFlags().Lookup("redis-addr"))
+	err = viper.BindPFlag("redis.addr", rootCMD.PersistentFlags().Lookup("redis-addr"))
 	if err != nil {
 		log.Error().
 			AnErr("Error", err).
@@ -60,7 +71,7 @@ func init() {
 		return
 	}
 
-	err = viper.BindPFlag("db.redis.password", rootCMD.PersistentFlags().Lookup("redis-pass"))
+	err = viper.BindPFlag("redis.password", rootCMD.PersistentFlags().Lookup("redis-pass"))
 	if err != nil {
 		log.Error().
 			AnErr("Error", err).
@@ -68,7 +79,7 @@ func init() {
 		return
 	}
 
-	err = viper.BindPFlag("db.redis.db", rootCMD.PersistentFlags().Lookup("redis-db"))
+	err = viper.BindPFlag("redis.db", rootCMD.PersistentFlags().Lookup("redis-db"))
 	if err != nil {
 		log.Error().
 			AnErr("Error", err).
