@@ -5,11 +5,11 @@ import (
 )
 
 type Vote struct {
-	ID        string
-	Name      string
-	Country   string
-	Candidate string
-	Date      int64
+	ID        string `json:"id" xml:"id"`
+	Name      string `json:"name" xml:"name"`
+	Country   string `json:"country" xml:"country"`
+	Candidate string `json:"candidate" xml:"candidate"`
+	Date      int64  `json:"date" xml:"date"`
 }
 
 func (v *Vote) Validate() error {
