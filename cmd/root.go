@@ -32,7 +32,7 @@ func init() {
 	rootCMD.PersistentFlags().String("db-type", "redis", "Database type to communicate with")
 
 	//redis
-	rootCMD.PersistentFlags().String("redis-addr", "localhost:6379", "Database address if using the redis driver")
+	rootCMD.PersistentFlags().String("redis-addr", "service-redis:6379", "Database address if using the redis driver")
 	rootCMD.PersistentFlags().String("redis-pass", "", "Database password if using the redis driver")
 	rootCMD.PersistentFlags().Int("redis-db", 0, "Database to use if using the redis driver")
 
