@@ -6,6 +6,7 @@ import (
 	"github.com/go-redis/redis/v8"
 	"github.com/htw-swa-jk-nk-ns/service-raw-data/vote"
 	"github.com/pkg/errors"
+	"github.com/rs/xid"
 	"github.com/spf13/viper"
 )
 
@@ -18,7 +19,7 @@ func (c *redisDatabase) insertVote(ctx context.Context, vote vote.Vote) error {
 	if err != nil {
 		return errors.Wrap(err, "failed to marshal vote to json")
 	}
-	c.db.Set(ctx, vote.ID, jsonVote, 0)
+	c.db.Set(ctx, xid.New().String(), jsonVote, 0)
 	return nil
 }
 

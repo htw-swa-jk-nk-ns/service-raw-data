@@ -5,7 +5,6 @@ import (
 )
 
 type Vote struct {
-	ID        string `json:"id" xml:"id"`
 	Name      string `json:"name" xml:"name"`
 	Country   string `json:"country" xml:"country"`
 	Candidate string `json:"candidate" xml:"candidate"`
@@ -13,9 +12,6 @@ type Vote struct {
 }
 
 func (v *Vote) Validate() error {
-	if v.ID == "" {
-		return errors.New("id cannot be empty")
-	}
 	if v.Name == "" {
 		return errors.New("name cannot be empty")
 	}

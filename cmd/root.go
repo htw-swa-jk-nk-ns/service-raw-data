@@ -36,6 +36,9 @@ func init() {
 	rootCMD.PersistentFlags().String("redis-pass", "", "Database password if using the redis driver")
 	rootCMD.PersistentFlags().Int("redis-db", 0, "Database to use if using the redis driver")
 
+	//mysql
+	rootCMD.PersistentFlags().String("mysql-addr", "service-mysql:3306", "mysql addr")
+
 	//api
 	err := viper.BindPFlag("api.format", rootCMD.PersistentFlags().Lookup("api-format"))
 	if err != nil {
@@ -87,6 +90,14 @@ func init() {
 		return
 	}
 
+	//mysql
+	err = viper.BindPFlag("mysql.addr", rootCMD.PersistentFlags().Lookup("mysql-addr"))
+	if err != nil {
+		log.Error().
+			AnErr("Error", err).
+			Msg("Can't bind flag mysql-addr")
+		return
+	}
 }
 
 var rootCMD = &cobra.Command{

@@ -41,6 +41,8 @@ func (d *Database) initialize() error {
 	switch dbType := viper.Get("db.type"); dbType {
 	case "redis":
 		d.database = &redisDatabase{}
+	case "mysql":
+		d.database = &mysqlDatabase{}
 	default:
 		return fmt.Errorf("invalid database drivername '%s'", dbType)
 	}
