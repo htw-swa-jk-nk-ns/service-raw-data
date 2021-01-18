@@ -9,6 +9,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 	"net/http"
+	"time"
 )
 
 // StartAPI starts the API.
@@ -37,6 +38,7 @@ func postVote(ctx echo.Context) error {
 	if err := ctx.Bind(&v); err != nil {
 		return getApiResponse(ctx, http.StatusBadRequest, newOutputError(errors.Wrap(err, "failed to bind input")))
 	}
+	v.Date = time.Now().Unix()
 
 	database, err := db.GetDatabase()
 	if err != nil {
