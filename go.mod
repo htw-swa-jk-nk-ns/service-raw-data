@@ -5,6 +5,7 @@ go 1.14
 require (
 	github.com/go-redis/redis/v8 v8.4.4
 	github.com/go-resty/resty/v2 v2.3.0
+	github.com/go-sql-driver/mysql v1.4.0
 	github.com/huandu/go-sqlbuilder v1.10.0
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/labstack/echo v3.3.10+incompatible

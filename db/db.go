@@ -44,7 +44,7 @@ func (d *Database) initialize() error {
 	case "mysql":
 		d.database = &mysqlDatabase{}
 	default:
-		return fmt.Errorf("invalid database drivername '%s'", dbType)
+		return fmt.Errorf("invalid database type '%s'", dbType)
 	}
 	err := d.validateAvailableInformation()
 	if err != nil {

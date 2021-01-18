@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/htw-swa-jk-nk-ns/service-raw-data/vote"
 	"github.com/huandu/go-sqlbuilder"
 	"github.com/jmoiron/sqlx"
@@ -40,11 +41,11 @@ func (d *mysqlDatabase) insertVote(ctx context.Context, vote vote.Vote) error {
 	return nil
 }
 
-func (d *mysqlDatabase) getAllVotes(ctx context.Context) (vote.Votes, error) {
+func (d *mysqlDatabase) getAllVotes(_ context.Context) (vote.Votes, error) {
 	var votes vote.Votes
 	err := d.db.Select(&votes, d.db.Rebind("SELECT * FROM votes"))
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to execut sql query")
+		return nil, errors.Wrap(err, "failed to execute sql query")
 	}
 
 	return votes, nil
@@ -52,7 +53,7 @@ func (d *mysqlDatabase) getAllVotes(ctx context.Context) (vote.Votes, error) {
 
 func (d *mysqlDatabase) initialize() error {
 	var err error
-	d.db, err = sqlx.ConnectContext(context.Background(), "mysql", viper.GetString("mysql.addr"))
+	d.db, err = sqlx.ConnectContext(context.Background(), "mysql", viper.GetString("mysql.dataSourceName"))
 	if err != nil {
 		return errors.Wrap(err, "failed to connect to mysql database")
 	}

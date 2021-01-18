@@ -37,7 +37,7 @@ func init() {
 	rootCMD.PersistentFlags().Int("redis-db", 0, "Database to use if using the redis driver")
 
 	//mysql
-	rootCMD.PersistentFlags().String("mysql-addr", "service-mysql:3306", "mysql addr")
+	rootCMD.PersistentFlags().String("mysql-dataSourceName", "tcp:service-mysql:3306", "mysql dataSourceName")
 
 	//api
 	err := viper.BindPFlag("api.format", rootCMD.PersistentFlags().Lookup("api-format"))
@@ -91,7 +91,7 @@ func init() {
 	}
 
 	//mysql
-	err = viper.BindPFlag("mysql.addr", rootCMD.PersistentFlags().Lookup("mysql-addr"))
+	err = viper.BindPFlag("mysql.dataSourceName", rootCMD.PersistentFlags().Lookup("mysql-dataSourceName"))
 	if err != nil {
 		log.Error().
 			AnErr("Error", err).
