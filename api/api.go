@@ -6,7 +6,6 @@ import (
 	"github.com/htw-swa-jk-nk-ns/service-raw-data/vote"
 	"github.com/labstack/echo"
 	"github.com/pkg/errors"
-	"github.com/rs/xid"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 	"net/http"
@@ -36,35 +35,37 @@ func StartAPI() {
 func postVote(ctx echo.Context) error {
 	v := vote.Vote{}
 	if err := ctx.Bind(&v); err != nil {
-		return getApiResoponse(ctx, http.StatusBadRequest, newOutputError(errors.Wrap(err, "failed to bind input")))
+		return getApiResponse(ctx, http.StatusBadRequest, newOutputError(errors.Wrap(err, "failed to bind input")))
 	}
-	v.ID = xid.New().String()
 
 	database, err := db.GetDatabase()
 	if err != nil {
-		return getApiResoponse(ctx, http.StatusBadGateway, newOutputError(errors.Wrap(err, "failed to get database")))
+		return getApiResponse(ctx, http.StatusBadGateway, newOutputError(errors.Wrap(err, "failed to get database")))
 	}
 	err = database.InsertVote(context.TODO(), v)
 	if err != nil {
-		return getApiResoponse(ctx, http.StatusBadGateway, newOutputError(errors.Wrap(err, "failed to insert vote into database")))
+		return getApiResponse(ctx, http.StatusBadGateway, newOutputError(errors.Wrap(err, "failed to insert vote into database")))
 	}
 
-	return getApiResoponse(ctx, http.StatusOK, v.ID)
+	return getApiResponse(ctx, http.StatusOK, nil)
 }
 
 func all(ctx echo.Context) error {
 	database, err := db.GetDatabase()
 	if err != nil {
-		return getApiResoponse(ctx, http.StatusBadGateway, newOutputError(errors.Wrap(err, "failed to get database")))
+		return getApiResponse(ctx, http.StatusBadGateway, newOutputError(errors.Wrap(err, "failed to get database")))
 	}
 	votes, err := database.GetAllVotes(context.TODO())
 	if err != nil {
-		return getApiResoponse(ctx, http.StatusBadGateway, newOutputError(errors.Wrap(err, "failed to get all votes")))
+		return getApiResponse(ctx, http.StatusBadGateway, newOutputError(errors.Wrap(err, "failed to get all votes")))
 	}
-	return getApiResoponse(ctx, http.StatusOK, votes)
+	if votes == nil {
+		votes = vote.Votes{}
+	}
+	return getApiResponse(ctx, http.StatusOK, votes)
 }
 
-func getApiResoponse(ctx echo.Context, statusCode int, response interface{}) error {
+func getApiResponse(ctx echo.Context, statusCode int, response interface{}) error {
 	switch format := viper.GetString("api.format"); format {
 	case "json":
 		return ctx.JSON(statusCode, response)
