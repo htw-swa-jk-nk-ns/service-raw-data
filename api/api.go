@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"github.com/htw-swa-jk-nk-ns/service-raw-data/apihelper"
 	"github.com/htw-swa-jk-nk-ns/service-raw-data/db"
 	"github.com/htw-swa-jk-nk-ns/service-raw-data/vote"
 	"github.com/labstack/echo"
@@ -22,6 +23,8 @@ func StartAPI() {
 
 	e := echo.New()
 
+	e.Use(apihelper.APILoggerMiddleware())
+
 	e.POST("/vote", postVote)
 
 	e.GET("/all", all)
@@ -36,18 +39,19 @@ func StartAPI() {
 func postVote(ctx echo.Context) error {
 	v := vote.Vote{}
 	if err := ctx.Bind(&v); err != nil {
-		return getApiResponse(ctx, http.StatusBadRequest, newOutputError(errors.Wrap(err, "failed to bind input")))
+		return getApiResponse(ctx, http.StatusBadRequest, apihelper.NewOutputError(errors.Wrap(err, "failed to bind input")))
 	}
 	v.Date = time.Now().Unix()
 
 	database, err := db.GetDatabase()
 	if err != nil {
-		return getApiResponse(ctx, http.StatusBadGateway, newOutputError(errors.Wrap(err, "failed to get database")))
+		return getApiResponse(ctx, http.StatusBadGateway, apihelper.NewOutputError(errors.Wrap(err, "failed to get database")))
 	}
 	err = database.InsertVote(context.TODO(), v)
 	if err != nil {
-		return getApiResponse(ctx, http.StatusBadGateway, newOutputError(errors.Wrap(err, "failed to insert vote into database")))
+		return getApiResponse(ctx, http.StatusBadGateway, apihelper.NewOutputError(errors.Wrap(err, "failed to insert vote into database")))
 	}
+	log.Info().Msg("successfully added vote")
 
 	return getApiResponse(ctx, http.StatusOK, nil)
 }
@@ -55,11 +59,11 @@ func postVote(ctx echo.Context) error {
 func all(ctx echo.Context) error {
 	database, err := db.GetDatabase()
 	if err != nil {
-		return getApiResponse(ctx, http.StatusBadGateway, newOutputError(errors.Wrap(err, "failed to get database")))
+		return getApiResponse(ctx, http.StatusBadGateway, apihelper.NewOutputError(errors.Wrap(err, "failed to get database")))
 	}
 	votes, err := database.GetAllVotes(context.TODO())
 	if err != nil {
-		return getApiResponse(ctx, http.StatusBadGateway, newOutputError(errors.Wrap(err, "failed to get all votes")))
+		return getApiResponse(ctx, http.StatusBadGateway, apihelper.NewOutputError(errors.Wrap(err, "failed to get all votes")))
 	}
 	if votes == nil {
 		votes = vote.Votes{}
@@ -75,15 +79,5 @@ func getApiResponse(ctx echo.Context, statusCode int, response interface{}) erro
 		return ctx.XML(statusCode, response)
 	default:
 		return ctx.String(http.StatusInternalServerError, "invalid output format '"+format+"'")
-	}
-}
-
-type OutputError struct {
-	message string
-}
-
-func newOutputError(err error) OutputError {
-	return OutputError{
-		message: err.Error(),
 	}
 }

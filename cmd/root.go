@@ -3,7 +3,6 @@ package cmd
 import (
 	"github.com/htw-swa-jk-nk-ns/service-raw-data/api"
 	"github.com/pkg/errors"
-	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -12,8 +11,6 @@ import (
 )
 
 func init() {
-	log.Logger = zerolog.New(zerolog.ConsoleWriter{Out: os.Stderr})
-
 	cobra.OnInitialize(func() {
 		rep := strings.NewReplacer(".", "_")
 		viper.SetEnvKeyReplacer(rep)
