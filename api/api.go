@@ -21,6 +21,7 @@ func StartAPI() {
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to start api")
 	}
+	log.Info().Msg("db was successfully initialized")
 
 	e := echo.New()
 
