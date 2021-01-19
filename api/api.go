@@ -16,6 +16,7 @@ import (
 // StartAPI starts the API.
 func StartAPI() {
 	// initialize database
+	log.Info().Msg("initializing db...")
 	_, err := db.GetDatabase()
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to start api")
